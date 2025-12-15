@@ -3,20 +3,25 @@
 ## 1. 개요 (Overview)
 슈카 인베스트(Syuka-Invest) 백엔드는 유튜브 영상 데이터를 수집/분석하고 주가 정보를 매핑하여 프론트엔드에 제공하는 핵심 로직을 담당합니다. Spring Boot 기반으로 안정적인 데이터 파이프라인과 REST API를 구축합니다.
 
-## 2. 개발 단계 (Phases)
+## 2. 현재 상태 요약 (Current Status) - 2025-12-15 Updated
+- **패키지 구조**: Domain-based Package (`video`, `asset`, `common`, `config`)로 리팩토링 완료.
+- **인프라**: Docker Compose(`mysql`, `mongo`, `redis`) 및 `.env` 설정 완료.
+- **보안**: MVP 빠른 개발을 위해 Spring Security 의존성 제거됨.
+- **도메인**: 핵심 엔티티(`Video`, `VideoMention`, `AssetInfo`, `AssetPrice`) 구현 완료. `AssetPrice`는 MongoDB Time-Series 사용.
+
+## 3. 개발 단계 (Phases)
 
 ### Phase 1: 도메인 및 DB 스키마 설계 <!-- id: p1 -->
-핵심 엔티티 정의 및 JPA/NoSQL 설계.
-- [ ] **엔티티 설계 (Entities)**
-    - `Video` (영상): id, title, publishedAt, thumbnail 등
-    - `Transcript` (자막): id, video_id, text_content (MongoDB)
-    - `Mention` (언급): video_id, asset_id, start_time, end_time, summary
-    - `AssetInfo` (자산 메타): id(code), name, type(STOCK, BOND, INDEX, RATE), currency
-    - `AssetPrice` (자산 시세): asset_id, date, open, high, low, close, value (MongoDB Time-Series)
-- [ ] **유연한 자산 구조 설계**
-    - 주식 뿐만 아니라 금리, 환율, 지수까지 포괄할 수 있는 추상화된 모델링 (`Asset` 인터페이스 활용)
-- [ ] **ERD 작성 및 검토**
-- [ ] **JPA Repository 생성**
+핵심 엔티티 정의 및 JPA/NoSQL 설계. (완료됨)
+- [x] **엔티티 설계 (Entities)**
+    - `Video` (영상): id, youtubeVideoId, title, publishedAt 등 (Soft Delete 적용)
+    - `VideoMention` (자산 언급): video_id, asset_code, startTime, contextSummary
+    - `AssetInfo` (자산 메타): assetCode, name, type, currency
+    - `AssetPrice` (자산 시세): assetCode, timestamp, ohlcv (MongoDB Time-Series)
+    - `BaseEntity`: Auditing(createdAt, updatedAt) + SoftDelete(deletedAt)
+- [x] **유연한 자산 구조 설계**
+    - `AssetType` Enum (STOCK, BOND, RATE, INDEX, COMMODITY) 적용
+- [ ] **JPA/Mongo Repository 인터페이스 생성** (다음 진행 예정)
 
 ### Phase 2: 외부 API 연동 모듈 (Infrastructure) <!-- id: p2 -->
 외부 서비스와의 통신을 담당하는 Client 구현.
@@ -57,8 +62,8 @@
 - [ ] **통합 테스트**
 - [ ] **CI/CD 파이프라인 구축**
 
-## 3. 기술 스택 상세 (Tech Stack Details)
-- **Framework**: Spring Boot 3.3.x (Java 17/24)
+## 4. 기술 스택 상세 (Tech Stack Details)
+- **Framework**: Spring Boot 3.5.x (Java 24)
 - **Persistence**: 
     - **MySQL (JPA)**: Video, Mention, AssetInfo (관계형 데이터)
     - **MongoDB**: AssetPrice (시계열 데이터), Transcript (대용량 텍스트)
