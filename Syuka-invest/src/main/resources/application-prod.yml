@@ -24,3 +24,11 @@ spring:
 logging:
   level:
     root: INFO
+
+api:
+  youtube:
+    key: ${YOUTUBE_API_KEY}
+  kis:
+    appkey: ${KIS_APP_KEY}
+    appsecret: ${KIS_APP_SECRET}
+    base-url: https://openapi.koreainvestment.com:9443

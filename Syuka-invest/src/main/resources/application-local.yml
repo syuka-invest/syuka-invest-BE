@@ -25,3 +25,11 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+api:
+  youtube:
+    key: ${YOUTUBE_API_KEY}
+  kis:
+    appkey: ${KIS_APP_KEY}
+    appsecret: ${KIS_APP_SECRET}
+    base-url: https://openapivts.koreainvestment.com:29443
