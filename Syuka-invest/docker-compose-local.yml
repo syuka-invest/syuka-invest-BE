@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${SERVICE_NAME}-mysql-local
+    restart: always
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Seoul
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  mongodb:
+    image: mongo:${MONGO_VERSION}
+    container_name: ${SERVICE_NAME}-mongo-local
+    restart: always
+    ports:
+      - "${MONGO_HOST_PORT}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
+      TZ: Asia/Seoul
+    volumes:
+      - ./mongodb/data:/data/db
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    container_name: ${SERVICE_NAME}-redis-local
+    restart: always
+    ports:
+      - "${REDIS_HOST_PORT}:6379"
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - ./redis/data:/data

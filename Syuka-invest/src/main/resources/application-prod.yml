@@ -4,22 +4,22 @@ spring:
       on-profile: prod
 
   datasource:
-    url: ${MYSQL_URL}
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_HOST_PORT}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: validate # 운영 환경에서는 스키마 자동 변경 금지
+      ddl-auto: validate
     show-sql: false
 
   data:
     mongodb:
-      uri: ${MONGO_URI}
+      uri: mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_HOST}:${MONGO_HOST_PORT}/${MYSQL_DATABASE}?authSource=admin
     redis:
       host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      port: ${REDIS_HOST_PORT}
 
 logging:
   level:

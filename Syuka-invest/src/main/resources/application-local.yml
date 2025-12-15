@@ -4,9 +4,9 @@ spring:
       on-profile: local
   
   datasource:
-    url: jdbc:mysql://localhost:3306/syuka_dev?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: password 
+    url: jdbc:mysql://localhost:${MYSQL_HOST_PORT}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -16,10 +16,10 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://root:password@localhost:27017/syuka_dev?authSource=admin
+      uri: mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@localhost:${MONGO_HOST_PORT}/${MYSQL_DATABASE}?authSource=admin
     redis:
       host: localhost
-      port: 6379
+      port: ${REDIS_HOST_PORT}
 
 logging:
   level:
